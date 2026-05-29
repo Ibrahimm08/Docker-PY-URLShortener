@@ -15,6 +15,23 @@
         <input type="text" name="url" placeholder="Enter long URL" required>
         <button type="submit">Shorten</button>
     </form>
+
+    {% if history %}
+    <table>
+        <tr>
+            <th>Short URL</th>
+            <th>Page Name</th>
+        </tr>
+        {% for result in history %}
+        <tr>
+            <td><a href="http://localhost:5000/{{result.short_code}}">http://localhost:5000/{{result.short_code}}</a></td>
+            <td><a href="{{result.long_url}}">{{result.page_title}}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No URLs Shortened</p>
+    {% endif %}
 </body>
 
 </html>
