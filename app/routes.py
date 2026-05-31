@@ -1,7 +1,7 @@
 # Where we put our HTTP routes
 from flask import Blueprint, request, redirect, render_template
 from .models import Url
-from .utilities import generate_code
+from .utilities import generate_code, add_time
 from app import db
 from mechanize import Browser
 
@@ -20,18 +20,25 @@ def home():
     history = Url.query.all() or False
     return render_template("index.html", history = history)
 
+
+
+
 # generates a shortened code saves it to the database and returns short URL and result page
 @main.route("/create", methods=["POST"])
 def create():
     long_url = request.form.get("url")
+    custom_url = request.form.get("url-name") or False   # Allow the user to customise the code of the url 
+    lifetime_url = request.form.get("lifetime") # Allow user to set when the short_url expires - e.g "months 1"
 
-    # Get the title of the page
+    # Open the URL and Get the title of the page
     br.open(long_url)
     page_title = br.title()
     br.close()
 
-    code = generate_code()
-    new = Url(short_code=code, long_url=long_url, page_title=page_title)
+    code = custom_url or generate_code()    # If user didn't enter a custom URL, generate one
+    expires_at = add_time(lifetime_url) if lifetime_url != "none" else None  # Adds time if user set an expiry
+
+    new = Url(short_code=code, long_url=long_url, page_title=page_title, expires_at=expires_at)
     db.session.add(new)
     db.session.commit()
 

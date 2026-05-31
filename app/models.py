@@ -6,3 +6,4 @@ class Url(db.Model):
     short_code = db.Column(db.String(10), unique=True, nullable=False)
     long_url = db.Column(db.String(2048), nullable=False)
     page_title = db.Column(db.String(2048), nullable = False)
+    expires_at = db.Column(db.Date, nullable = True)

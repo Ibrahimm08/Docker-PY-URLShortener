@@ -13,6 +13,15 @@
 
     <form action="/create" method="POST">
         <input type="text" name="url" placeholder="Enter long URL" required>
+        <input type="text" name="url-name" placeholder="(Optional) Enter new URL name" maxlength="10">
+        <select name="lifetime" id="lifetime">
+            <option value="days 1">1 Day</option>
+            <option value="days 3">3 Days</option>
+            <option value="weeks 1">1 Week</option>
+            <option value="weeks 2">3 Weeks</option>
+            <option value="months 1">1 Month</option>
+            <option value="none">Never</option>
+        </select>
         <button type="submit">Shorten</button>
     </form>
 
@@ -21,11 +30,13 @@
         <tr>
             <th>Short URL</th>
             <th>Page Name</th>
+            <th>Expires</th>
         </tr>
         {% for result in history %}
         <tr>
             <td><a href="http://localhost:5000/{{result.short_code}}">http://localhost:5000/{{result.short_code}}</a></td>
             <td><a href="{{result.long_url}}">{{result.page_title}}</a></td>
+            <td>{{result.expires_at}}</td>
         </tr>
         {% endfor %}
     </table>
